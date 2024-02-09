@@ -3,13 +3,13 @@ from pathlib import Path
 import requests
 import pandas as pd
 from typing import Union
-from .data_utils import read_data
 import numpy as np
 from collections import defaultdict
 from time import sleep
 from qdrant_client import QdrantClient
 from qdrant_client.http import models, exceptions
 from qdrant_client.models import Distance, VectorParams, PointStruct
+from .data_utils import read_data
 from .log_utils import logger
 
 

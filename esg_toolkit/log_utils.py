@@ -1,14 +1,16 @@
-import os
 import logging
+import os
 import sys
 from datetime import datetime
 from pathlib import Path
 
 
 def log_setting(
-    log_folder: str = f"logs-default", log_level: int = logging.INFO, stream: bool = True
+    log_folder: str = f"logs-default",
+    log_level: int = logging.INFO,
+    stream: bool = True,
 ):
-    
+
     log_folder = log_folder if log_folder.startswith("logs-") else "logs-" + log_folder
     log_filepath = os.path.join(
         Path(__file__).resolve().parent,

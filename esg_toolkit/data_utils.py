@@ -1,20 +1,24 @@
-import logging
 import hashlib
+import json
+import logging
+import os
 from typing import Any
+
 import pandas as pd
 import yaml
-import json
+from dotenv import load_dotenv
+
 from .log_utils import logger
 
+load_dotenv()
 
-GCP_PROJECT_ID = "esg-rag"
 
 def read_data(path: str) -> Any:
     if path.endswith(".json"):
         if path.startswith("gs://"):
             import gcsfs
 
-            fs = gcsfs.GCSFileSystem(project=GCP_PROJECT_ID)
+            fs = gcsfs.GCSFileSystem(project=os.environ.get("GCP_PROJECT_ID"))
             with fs.open(path, "r", encoding="utf-8") as f:
                 data = json.load(f)
         else:
@@ -49,8 +53,8 @@ def save_data(data: Any, path: str) -> None:
     if path.endswith(".json"):
         if path.startswith("gs://"):
             import gcsfs
-            
-            fs = gcsfs.GCSFileSystem(project=GCP_PROJECT_ID)
+
+            fs = gcsfs.GCSFileSystem(project=os.environ.get("GCP_PROJECT_ID"))
             with fs.open(path, "w", encoding="utf-8") as f:
                 json.dump(data, f, ensure_ascii=False, indent=4)
         else:
@@ -89,8 +93,8 @@ def string_slugify(name: str, allow_unicode: bool = False) -> bool:
     trailing whitespace, dashes, and underscores.
     """
 
-    import unicodedata
     import re
+    import unicodedata
 
     name = str(name)
     if allow_unicode:
@@ -121,4 +125,3 @@ def hash_string_to_ID(string: str):
         logger.error(err)
         m.update(string)
     return int(str(int(m.hexdigest(), 16))[0:12])
-

@@ -17,12 +17,8 @@ from .log_utils import logger
 
 class QdrantDBWrapper:
     def __init__(self) -> None:
-        self.ROOT_DIR = Path(__file__).absolute().parents[1]
-        self.config = read_data(str(self.ROOT_DIR / "config.yaml"))["DATABASE"]
-        self.HOST = self.config["QDRANT"]["HOST"]
-        self.PORT = self.config["QDRANT"]["PORT"]
-        QDRANT_URI = os.environ.get("QDRANT_URI", f"{self.HOST}:{self.PORT}")
-        self.CONNECT_URI = f"http://{QDRANT_URI}"
+        host, port = os.environ.get("QDRANT_HOST"), os.environ.get("QDRANT_PORT")
+        self.CONNECT_URI = f"http://{host}:{port}"
         self.client = QdrantClient(url=self.CONNECT_URI)
         logger.info(f"CONNECT_URI: {self.CONNECT_URI}")
 
